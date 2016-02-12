@@ -1,0 +1,34 @@
+{
+  "name": "ezinaz/retssync",
+  "type": "library",
+  "license": "MIT",
+  "description": "rets sync library",
+  "keywords": [
+    "rets",
+    "mls"
+  ],
+  "homepage": "http://github.com/ezinaz",
+  "authors": [
+    {
+      "name": "Eric Zimmerman",
+      "email": "ezinaz@gmail.com",
+      "homepage": "http://ezinaz.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "troydavisson/phrets": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.1.*",
+    "psr/log": "1.*",
+    "monolog/monolog": "1.10.*",
+    "gsaulmon/guzzlerecorder": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+        "PHRETS\\": "src/"
+    }
+    }
+}
+    
