@@ -7,6 +7,26 @@ require_once("vendor/autoload.php");
 $log = new \Monolog\Logger('PHRETS');
 $log->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Logger::DEBUG));
 
+$shortopts = "";
+$shortopts .= "d:";
+$shortopts .= "s:";
+$options = getopt($shortopts);
+var_dump($options);
+
+$days = $options['d'];
+$paramoffset = $options['s'] + 0;
+$offset = ($paramoffset > 0) ? $paramoffset : 1;
+echo "Days parameter: " . $days . "\n";
+echo "Param Offset: " . $paramoffset . "\n";
+echo "Offset: " . $offset . "\n";
+
+$now = new DateTime();
+echo "Current date/time: " . $now->format('Y-m-d\TH:i:s') . "\n";
+echo "Current date starting at midnight: " . $now->format('Y-m-d\T00:00:00') . "\n";
+$newdate = $now->modify('-' . $days . ' day');
+$newdatestring = $newdate->format('Y-m-d\T00:00:00');
+echo "Start date starting at midnight: " . $newdatestring . "\n";
+
 // Get config properties
 $ini = parse_ini_file("ezrets.ini", true);
 
@@ -20,7 +40,7 @@ $property_classes = array("A");
 
 // DateTime which is used to determine how far back to retrieve records.
 // using a really old date so we can get everything
-$previous_start_time = "2016-02-12T00:00:00";
+//$previous_start_time = "2016-02-12T00:00:00";
 //$previous_start_time = "2016-01-01T00:00:00";
 
 $config = new \PHRETS\Configuration;
@@ -56,12 +76,12 @@ foreach ($property_classes as $class) {
 		fputcsv($fh, $fields);
 	
         $maxrows = true;
-        $offset = 1;
+        //$offset = 1;
         $limit = 500;
         $fields_order = array();
 		$resource = "Property";
 
-		$query = "({$rets_modtimestamp_field}={$previous_start_time}+)";
+		$query = "({$rets_modtimestamp_field}={$newdatestring}+)";
 		
 		while ($maxrows) {
 			// run RETS search
@@ -98,9 +118,6 @@ foreach ($property_classes as $class) {
 			$maxrows = $results->isMaxRowsReached();
 		
 		}
-		
-
-
 		
 		var_dump($properties);
 		
